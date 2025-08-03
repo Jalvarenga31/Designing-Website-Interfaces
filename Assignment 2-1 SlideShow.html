@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Array-driven Slideshow</title>
+  <style>
+    .slideshow {
+      position: relative;
+      width: 600px;
+      height: 350px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .slideshow img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .controls button {
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 6px;
+      pointer-events: all;
+    }
+    .indicators {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+    }
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+      cursor: pointer;
+    }
+    .indicator.active {
+      background: rgba(255,255,255,1);
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<div class="slideshow" id="slideshow">
+  <img id="slideImage" src="" alt="Slideshow image" />
+  <div class="controls">
+    <button id="prevBtn" aria-label="Previous slide">&lt;</button>
+    <button id="nextBtn" aria-label="Next slide">&gt;</button>
+  </div>
+  <div class="indicators" id="indicators"></div>
+</div>
+
+<script>
+  // 1. Array of slide image URLs
+  const slides = [
+    'SlideImage1.jpg',
+    'SlideImage2.jpg',
+    'SlideImage3.jpg',
+    'SlideImage4.jpg'
+  ];
+
+  let currentIndex = 0;
+  const imgEl = document.getElementById('slideImage');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const indicatorsContainer = document.getElementById('indicators');
+  let autoPlayInterval = null;
+  const AUTO_PLAY_DELAY = 4000; // 4 seconds
+
+  // 2. Render the current slide
+  function showSlide(index) {
+    // wrap-around logic
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    currentIndex = index;
+    imgEl.src = slides[currentIndex];
+    updateIndicators();
+  }
+
+  // 3. Setup indicators (dots)
+  function createIndicators() {
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.classList.add('indicator');
+      dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+      dot.addEventListener('click', () => {
+        showSlide(i);
+        resetAutoPlay();
+      });
+      indicatorsContainer.appendChild(dot);
+    });
+  }
+
+  function updateIndicators() {
+    const dots = indicatorsContainer.children;
+    Array.from(dots).forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  // 4. Navigation handlers
+  prevBtn.addEventListener('click', () => {
+    showSlide(currentIndex - 1);
+    resetAutoPlay();
+  });
+  nextBtn.addEventListener('click', () => {
+    showSlide(currentIndex + 1);
+    resetAutoPlay();
+  });
+
+  // 5. Auto-play
+  function startAutoPlay() {
+    autoPlayInterval = setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, AUTO_PLAY_DELAY);
+  }
+  function stopAutoPlay() {
+    clearInterval(autoPlayInterval);
+    autoPlayInterval = null;
+  }
+  function resetAutoPlay() {
+    stopAutoPlay();
+    startAutoPlay();
+  }
+
+  // Pause on hover
+  const slideshowEl = document.getElementById('slideshow');
+  slideshowEl.addEventListener('mouseenter', stopAutoPlay);
+  slideshowEl.addEventListener('mouseleave', startAutoPlay);
+
+  // Initialize
+  createIndicators();
+  showSlide(0);
+  startAutoPlay();
+</script>
+
+</body>
+</html>
