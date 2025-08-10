@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Using the example of the assignment we create the table. I chose gray so we can see the black pieces-->
+  <style>
+    body { text-align: center; }
+    .cell {
+      height: 30px;
+      width: 30px;
+      border: 1.5px inset grey;
+      position: relative;
+    }
+    .blackcell { background-color: gray; }
+    .whitecell { background-color: white; }
+    .checker {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      cursor: grab;
+    }
+    .checker.red { background-color: red; }
+    .checker.blue { background-color: black; }
+  </style> <!--We make the color of the pieces to use later-->
+</head>
+<body>
+<script>
+  const center = document.createElement('center'); //We put the table in the middle of the webpage
+  const ChessTable = document.createElement('table');
+  const board = Array.from({ length: 8 }, () => Array(8).fill(null));
+
+  // Build board and make black squares droppable
+  for (let i = 0; i < 8; i++) {
+    const tr = ChessTable.insertRow();
+    for (let j = 0; j < 8; j++) {
+      const td = tr.insertCell();
+      td.className = 'cell ' + (((i + j) % 2 === 0) ? 'whitecell' : 'blackcell');
+      if ((i + j) % 2 !== 0) {
+        td.ondragover = ev => ev.preventDefault();
+        td.ondrop = handleDrop;
+      }
+    }
+  }
+
+  ChessTable.setAttribute('cellspacing', '0'); //Creating the size of the table spaces
+  ChessTable.setAttribute('width', '270px');
+  center.appendChild(ChessTable);
+  document.body.appendChild(center);
+
+  const rows = ChessTable.rows;
+
+  //create draggable checkers
+  function createPiece(row, col, color) {
+    const cell = rows[row].cells[col];
+    const piece = document.createElement('div');
+    piece.className = `checker ${color}`;
+    piece.id = `piece-${row}-${col}`;
+    piece.setAttribute('draggable', 'true');
+    piece.ondragstart = ev => ev.dataTransfer.setData('text/plain', ev.target.id);
+    cell.appendChild(piece);
+    board[row][col] = color;
+  }
+
+  //Place the starting pieces
+  for (let i = 0; i < 3; i++)
+    for (let j = 0; j < 8; j++)
+      if ((i + j) % 2 !== 0) createPiece(i, j, 'red');
+
+  for (let i = 5; i < 8; i++)
+    for (let j = 0; j < 8; j++)
+      if ((i + j) % 2 !== 0) createPiece(i, j, 'blue');
+
+  function handleDrop(ev) {
+    ev.preventDefault();
+    const id = ev.dataTransfer.getData('text/plain');
+    const piece = document.getElementById(id);
+    const [rFrom, cFrom] = id.split('-').slice(1).map(Number);
+
+    const toTd = ev.target.closest('td');
+    const rTo = toTd.parentElement.rowIndex;
+    const cTo = toTd.cellIndex;
+
+    const dr = rTo - rFrom, dc = cTo - cFrom;
+
+    // Only allow normal move or capture (2 squares diagonal)
+    if (Math.abs(dr) === 1 && Math.abs(dc) === 1 && !board[rTo][cTo]) {
+      captureOrMove(rFrom, cFrom, rTo, cTo);
+    } else if (Math.abs(dr) === 2 && Math.abs(dc) === 2) {
+      const rMid = (rFrom + rTo) / 2;
+      const cMid = (cFrom + cTo) / 2;
+      if (board[rMid][cMid] && board[rMid][cMid] !== board[rFrom][cFrom] && !board[rTo][cTo]) {
+        // Remove captured piece
+        board[rMid][cMid] = null;
+        const midId = `piece-${rMid}-${cMid}`;
+        document.getElementById(midId)?.remove();
+        captureOrMove(rFrom, cFrom, rTo, cTo);
+      }
+    }
+  }
+
+  function captureOrMove(rFrom, cFrom, rTo, cTo) {
+    board[rTo][cTo] = board[rFrom][cFrom];
+    board[rFrom][cFrom] = null;
+    const piece = document.getElementById(`piece-${rFrom}-${cFrom}`);
+    piece.id = `piece-${rTo}-${cTo}`;
+    rows[rTo].cells[cTo].appendChild(piece);
+  }
+</script>
+</body>
+</html>
