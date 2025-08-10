@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie List Input</title> <!--Tells the User what to do-->
+</head>
+<body>
+  <h2>Enter Movie Titles</h2> <!--Little text within the text box to tell the user what to type-->
+  <form id="movieForm">
+    <textarea id="movieInput" rows="10" cols="50" placeholder="Enter one movie per line..."></textarea><br><br> <!--Text Area for user input-->
+    <button type="button" onclick="displayMovies()">Show List</button> <!-- Button for user to press-->
+    <input type="reset" value="Clear List"> <!--Reset Button for user if they want to make a new list-->
+  </form>
+
+  <!--Making the output prompt-->
+  <script>
+    function displayMovies() {
+      const input = document.getElementById('movieInput').value; //We get the string
+      const movies = input.split('\n').filter(line => line.trim() !== ''); //display it how we want
+
+      const newWindow = window.open('', '_blank', 'width=400,height=600'); //new window
+      newWindow.document.write(`
+        <!DOCTYPE html><html><head><title>Movie List</title></head>
+        <body><h2>Your Movie List</h2><ul>
+        ${movies.map(m => `<li>${m}</li>`).join('')}
+        </ul></body></html>
+      `);// Output the list
+      newWindow.document.close();
+    }
+  </script>
+</body>
+</html>
