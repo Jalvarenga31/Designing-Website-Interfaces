@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Input Form</title>
+  <!--Creating the Text boxes, Titles, and button-->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+    }
+    #output {
+      margin-top: 30px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<!--Grabbing the information from the user and storing it-->
+<body>
+
+  <h2>Enter Player Details</h2>
+    <!--Creating the text boxes with input information that we want from the user-->
+  <label for="username">Username:</label>
+  <input type="text" id="username" placeholder="Enter username">
+
+  <label for="weapons">Weapons:</label>
+  <input type="text" id="weapons" placeholder="Enter weapons">
+
+  <label for="health">Health/Damage:</label>
+  <input type="text" id="health" placeholder="Enter health or damage">
+
+  <label for="points">Point Total:</label>
+  <input type="text" id="points" placeholder="Enter point total">
+
+  <button onclick="submitForm()">Submit</button>
+
+  <div id="output"></div>
+
+  <script> //Now we store the information for use later
+    function submitForm() {
+      // We get the values from input fields
+      const username = document.getElementById('username').value;
+      const weapons = document.getElementById('weapons').value;
+      const health = document.getElementById('health').value;
+      const points = document.getElementById('points').value;
+
+      // then we display the entered values
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = `
+        <h3>Player Summary</h3>
+        <p><strong>Username:</strong> ${username}</p>
+        <p><strong>Weapons:</strong> ${weapons}</p>
+        <p><strong>Health/Damage:</strong> ${health}</p>
+        <p><strong>Point Total:</strong> ${points}</p>
+      `;
+    }
+  </script>
+
+</body>
+</html>
