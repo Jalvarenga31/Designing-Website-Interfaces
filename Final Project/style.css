@@ -1,0 +1,147 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f4f4f9;
+  text-align: center;
+}
+
+/* Titles */
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+/* Paragraph text */
+p {
+  font-size: 1.2em;
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  color: #333;
+}
+
+/* Buttons + links styled as buttons */
+button, 
+#backBtn {
+  font-size: 1.1em;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+/* Blue button (default) */
+button {
+  background: #007bff;
+  color: white;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Back button (gray) */
+#backBtn {
+  background: #6c757d;
+  color: white;
+}
+
+#backBtn:hover {
+  background: #5a6268;
+}
+
+/* Clear button (red) */
+#clearBtn {
+  background: #d9534f;
+  color: white;
+}
+
+#clearBtn:hover {
+  background: #c9302c;
+}
+
+/* Review form */
+form {
+  margin: 0 auto 20px auto;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  max-width: 500px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 5px;
+}
+
+/* Review display */
+.review {
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px auto;
+  background: #fff;
+  max-width: 500px;
+  text-align: left;
+}
+
+.spoiler {
+  background-color: black;
+  color: black;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Navigation bar */
+.navbar {
+  background: #222;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+
+.navbar a {
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: background 0.3s;
+}
+
+.navbar a:hover {
+  background: #444;
+  border-radius: 4px;
+}
+
+.navbar a.active {
+  background: #007bff;
+  border-radius: 4px;
+}
+
+/* Work in Progress placeholder styling */
+.wip {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 100px;
+  color: #ffcc00; /* gold/yellow warning color */
+}
